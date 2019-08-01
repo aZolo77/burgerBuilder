@@ -88,44 +88,49 @@ class BurgerBuilder extends Component {
     });
   };
 
-  // Send Order to the Database
   purchaseContinueHandler = () => {
-    const { ingredients, totalPrice } = this.state;
-    this.setState({
-      loading: true
-    });
-    const order = {
-      ingredients,
-      price: totalPrice,
-      customer: {
-        name: 'Zollo',
-        address: {
-          street: 'Test street 1',
-          zipcode: '123456',
-          country: 'Russia'
-        },
-        email: 'test@gmail.com'
-      },
-      deliveryMethod: 'fastest'
-    };
-
-    axios
-      .post('/orders.json', order) // firebase endpoint
-      .then(response => {
-        console.log(response);
-        this.setState({
-          loading: false,
-          purchasing: false
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({
-          loading: true,
-          purchasing: false
-        });
-      });
+    const { history } = this.props;
+    history.push('/checkout');
   };
+
+  // Send Order to the Database
+  // purchaseContinueHandler = () => {
+  //   const { ingredients, totalPrice } = this.state;
+  //   this.setState({
+  //     loading: true
+  //   });
+  //   const order = {
+  //     ingredients,
+  //     price: totalPrice,
+  //     customer: {
+  //       name: 'Zollo',
+  //       address: {
+  //         street: 'Test street 1',
+  //         zipcode: '123456',
+  //         country: 'Russia'
+  //       },
+  //       email: 'test@gmail.com'
+  //     },
+  //     deliveryMethod: 'fastest'
+  //   };
+
+  //   axios
+  //     .post('/orders.json', order) // firebase endpoint
+  //     .then(response => {
+  //       console.log(response);
+  //       this.setState({
+  //         loading: false,
+  //         purchasing: false
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       this.setState({
+  //         loading: true,
+  //         purchasing: false
+  //       });
+  //     });
+  // };
 
   render() {
     const {
