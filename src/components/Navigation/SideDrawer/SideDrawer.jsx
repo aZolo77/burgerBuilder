@@ -2,7 +2,7 @@ import React from 'react';
 import Logo from '../../Logo/Logo';
 import NavigationItems from '../NavigationItems/NavigationItems';
 import Backdrop from '../../UI/Backdrop/Backdrop';
-import Aux from '../../../hoc/Aux/Aux';
+import Adj from '../../../hoc/Adj/Adj';
 
 import classes from './SideDrawer.css';
 
@@ -11,7 +11,7 @@ const SideDrawer = ({ closed, open }) => {
     ? [classes.SideDrawer, classes.Open]
     : [classes.SideDrawer, classes.Close];
   return (
-    <Aux>
+    <Adj>
       <Backdrop show={open} clicked={closed} />
       <div className={attachedClasses.join(' ')}>
         <div className={classes.Logo}>
@@ -21,7 +21,7 @@ const SideDrawer = ({ closed, open }) => {
           <NavigationItems />
         </nav>
       </div>
-    </Aux>
+    </Adj>
   );
 };
 

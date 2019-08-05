@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Modal from '../../components/UI/Modal/Modal';
-import Aux from '../Aux/Aux';
+import Adj from '../Adj/Adj';
 
 const withErrorHandler = (WrappedComponent, axios) => {
   //anonymous class
@@ -38,12 +38,12 @@ const withErrorHandler = (WrappedComponent, axios) => {
     render() {
       const { error } = this.state;
       return (
-        <Aux>
+        <Adj>
           <Modal show={error} modalClosed={this.errorConfirmedHandler}>
             {error ? <p style={{ color: 'red' }}>{error.message}</p> : null}
           </Modal>
           <WrappedComponent {...this.props} />
-        </Aux>
+        </Adj>
       );
     }
   };

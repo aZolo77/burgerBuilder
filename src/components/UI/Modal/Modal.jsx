@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Aux from '../../../hoc/Aux/Aux';
+import Adj from '../../../hoc/Adj/Adj';
 import Backdrop from '../Backdrop/Backdrop';
 import classes from './Modal.css';
 
@@ -18,7 +18,7 @@ class Modal extends Component {
   render() {
     const { children, show, modalClosed } = this.props;
     return (
-      <Aux>
+      <Adj>
         <Backdrop show={show} clicked={modalClosed} />
         <div
           className={classes.Modal}
@@ -29,7 +29,7 @@ class Modal extends Component {
         >
           {children}
         </div>
-      </Aux>
+      </Adj>
     );
   }
 }
