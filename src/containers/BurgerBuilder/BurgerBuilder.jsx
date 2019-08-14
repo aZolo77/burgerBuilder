@@ -1,35 +1,23 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import axios from '../../axios-orders';
+import { connect } from 'react-redux';
 
-import * as actionTypes from "../../store/actions";
-import Adj from "../../hoc/Adj/Adj";
-import Burger from "../../components/Burger/Burger";
-import BuildControls from "../../components/Burger/BuildControls/BuildControls";
-import Modal from "../../components/UI/Modal/Modal";
-import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
-import Spinner from "../../components/UI/Spinner/Spinner";
-import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-
-// 3d libs
-import axios from "../../axios-orders";
+import * as bugerBuilderActions from '../../store/actions/index';
+import Adj from '../../hoc/Adj/Adj';
+import Burger from '../../components/Burger/Burger';
+import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 class BurgerBuilder extends Component {
   state = {
-    purchasing: false,
-    loading: false,
-    error: null
+    purchasing: false
   };
 
   componentDidMount() {
-    // axios
-    //   .get('/ingredients.json')
-    //   .then(({ data }) => {
-    //     const { ingredients } = this.state;
-    //     if (!ingredients) this.setState({ ingredients: data });
-    //   })
-    //   .catch(error => {
-    //     this.setState({ error: true });
-    //   });
+    this.props.onInitIngredients();
   }
 
   updatePurchaseState = ingredients => {
@@ -55,13 +43,20 @@ class BurgerBuilder extends Component {
   purchaseContinueHandler = () => {
     const { history } = this.props;
     history.push({
-      pathname: "/checkout"
+      pathname: '/checkout'
     });
   };
 
   render() {
-    const { ings, price, onIngredientAdded, onIngredientRemoved } = this.props;
-    const { purchasing, loading, error } = this.state;
+    const { purchasing } = this.state;
+    const {
+      ings,
+      price,
+      onIngredientAdded,
+      onIngredientRemoved,
+      error
+    } = this.props;
+
     // for disabling Less Buttons
     const disabledInfo = { ...ings };
     for (const key in disabledInfo) {
@@ -78,7 +73,7 @@ class BurgerBuilder extends Component {
       />
     );
 
-    const burger = (
+    const burger = ings ? (
       <Adj>
         <Burger ingredients={ings} />
         <BuildControls
@@ -90,10 +85,10 @@ class BurgerBuilder extends Component {
           ordered={this.purchaseHandler}
         />
       </Adj>
-    );
+    ) : null;
 
     const burgerAlternative = error ? (
-      <p style={{ textAlign: "center", color: "red" }}>
+      <p style={{ textAlign: 'center', color: 'red' }}>
         Ingredients can't be loaded
       </p>
     ) : (
@@ -103,7 +98,7 @@ class BurgerBuilder extends Component {
     return (
       <Adj>
         <Modal show={purchasing} modalClosed={this.purchaseCancelHandler}>
-          {loading ? <Spinner /> : orderSummary}
+          {orderSummary}
         </Modal>
         {ings ? burger : burgerAlternative}
       </Adj>
@@ -111,25 +106,21 @@ class BurgerBuilder extends Component {
   }
 }
 
-const mapStateToProps = ({ ingredients, totalPrice }) => {
+const mapStateToProps = ({ ingredients, totalPrice, error }) => {
   return {
     ings: ingredients,
-    price: totalPrice
+    price: totalPrice,
+    error: error
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onIngredientAdded: ingredientName => () =>
-      dispatch({
-        type: actionTypes.ADD_INGREDIENT,
-        payload: { ingredientName }
-      }),
-    onIngredientRemoved: ingredientName => () =>
-      dispatch({
-        type: actionTypes.REMOVE_INGREDIENT,
-        payload: { ingredientName }
-      })
+    onIngredientAdded: ingName => () =>
+      dispatch(bugerBuilderActions.addIngedient(ingName)),
+    onIngredientRemoved: ingName => () =>
+      dispatch(bugerBuilderActions.removeIngedient(ingName)),
+    onInitIngredients: () => dispatch(bugerBuilderActions.initIngredients())
   };
 };
 
