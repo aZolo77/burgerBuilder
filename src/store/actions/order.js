@@ -32,7 +32,7 @@ export const purchaseBurger = orderData => {
       .post('/orders.json', orderData) // firebase endpoint
       .then(response => {
         console.log(response.data);
-        dispatch(purchaseBurgerSuccess(response.data, orderData));
+        dispatch(purchaseBurgerSuccess(response.data.name, orderData));
       })
       .catch(err => {
         dispatch(purchaseBurgerFail(err));

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import axios from '../../../axios-orders';
 import { connect } from 'react-redux';
 
-import * as actions from '../../../store/actions/index';
-import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import * as orderActions from '../../../store/actions/index';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 
 import classes from './ContactData.css';
 
@@ -201,7 +201,10 @@ export class ContactData extends Component {
   }
 }
 
-const mapStateToProps = ({ ingredients, totalPrice, loading }) => {
+const mapStateToProps = ({
+  burgerBuilder: { ingredients, totalPrice },
+  order: { loading }
+}) => {
   return {
     ingredients,
     price: totalPrice,
@@ -211,7 +214,7 @@ const mapStateToProps = ({ ingredients, totalPrice, loading }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onOrderBurger: orderData => dispatch(actions.purchaseBurger(orderData))
+    onOrderBurger: orderData => dispatch(orderActions.purchaseBurger(orderData))
   };
 };
 
