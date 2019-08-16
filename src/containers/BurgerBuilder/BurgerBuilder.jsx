@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from '../../axios-orders';
 import { connect } from 'react-redux';
 
-import * as bugerBuilderActions from '../../store/actions/index';
+import * as actions from '../../store/actions/index';
 import Adj from '../../hoc/Adj/Adj';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -41,7 +41,8 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = () => {
-    const { history } = this.props;
+    const { history, onInitPurchase } = this.props;
+    onInitPurchase();
     history.push({
       pathname: '/checkout'
     });
@@ -118,11 +119,11 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    onIngredientAdded: ingName => () =>
-      dispatch(bugerBuilderActions.addIngedient(ingName)),
+    onIngredientAdded: ingName => () => dispatch(actions.addIngedient(ingName)),
     onIngredientRemoved: ingName => () =>
-      dispatch(bugerBuilderActions.removeIngedient(ingName)),
-    onInitIngredients: () => dispatch(bugerBuilderActions.initIngredients())
+      dispatch(actions.removeIngedient(ingName)),
+    onInitIngredients: () => dispatch(actions.initIngredients()),
+    onInitPurchase: () => dispatch(actions.purchaseInit())
   };
 };
 
