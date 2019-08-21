@@ -27,3 +27,10 @@
 .Danger {
   color: #944317;
 }
+
+.Button.Attention {
+  color: #fd5900;
+  display: inline-block;
+  border: 2px solid #fd5900;
+  padding: 10px;
+}
