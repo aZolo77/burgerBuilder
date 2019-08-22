@@ -55,11 +55,11 @@ export const purchaseBurgerFail = error => {
 };
 
 // * async
-export const purchaseBurger = orderData => {
+export const purchaseBurger = (orderData, token = null) => {
   return dispatch => {
     dispatch(purchaseBurgerStart());
     axios
-      .post('/orders.json', orderData) // firebase endpoint
+      .post(`/orders.json?auth=${token}`, orderData) // firebase endpoint
       .then(response => {
         // console.log(response.data);
         dispatch(purchaseBurgerSuccess(response.data.name, orderData));
@@ -70,11 +70,11 @@ export const purchaseBurger = orderData => {
   };
 };
 
-export const fetchOrders = () => {
+export const fetchOrders = (token = null) => {
   return dispatch => {
     dispatch(fetchOrdersStart());
     axios
-      .get('/orders.json')
+      .get(`/orders.json?auth=${token}`) // ** sending token to firebase
       .then(({ data }) => {
         const orders = [];
         for (const key in data) {

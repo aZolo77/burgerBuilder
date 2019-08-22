@@ -118,7 +118,7 @@ export class ContactData extends Component {
   // Send Order to the Database
   orderHandler = e => {
     e.preventDefault();
-    const { ingredients, price, onOrderBurger } = this.props;
+    const { ingredients, price, onOrderBurger, idToken } = this.props;
     const { orderForm } = this.state;
 
     const orderData = {};
@@ -133,7 +133,7 @@ export class ContactData extends Component {
       orderData
     };
 
-    onOrderBurger(order);
+    onOrderBurger(order, idToken);
   };
 
   inputChangedHandler = id => ({ target }) => {
@@ -203,18 +203,21 @@ export class ContactData extends Component {
 
 const mapStateToProps = ({
   burgerBuilder: { ingredients, totalPrice },
-  order: { loading }
+  order: { loading },
+  auth: { idToken }
 }) => {
   return {
     ingredients,
     price: totalPrice,
-    loading
+    loading,
+    idToken
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onOrderBurger: orderData => dispatch(orderActions.purchaseBurger(orderData))
+    onOrderBurger: (orderData, token) =>
+      dispatch(orderActions.purchaseBurger(orderData, token))
   };
 };
 

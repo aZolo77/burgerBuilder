@@ -6,7 +6,7 @@ import Adj from '../../../hoc/Adj/Adj';
 
 import classes from './SideDrawer.css';
 
-const SideDrawer = ({ closed, open }) => {
+const SideDrawer = ({ closed, open, isAuth }) => {
   let attachedClasses = open
     ? [classes.SideDrawer, classes.Open]
     : [classes.SideDrawer, classes.Close];
@@ -18,7 +18,7 @@ const SideDrawer = ({ closed, open }) => {
           <Logo />
         </div>
         <nav>
-          <NavigationItems />
+          <NavigationItems isAuthenticated={isAuth} />
         </nav>
       </div>
     </Adj>

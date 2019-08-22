@@ -125,7 +125,7 @@ class Auth extends Component {
 
   render() {
     const { isSignup } = this.state;
-    const { loading, idToken, userId, error } = this.props;
+    const { loading, error } = this.props;
 
     if (loading) {
       return <Spinner />;

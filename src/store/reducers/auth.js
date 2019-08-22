@@ -20,6 +20,15 @@ const authSucccess = (state, payload) => {
   });
 };
 
+const authLogout = (state, payload) => {
+  return updateObject(state, {
+    idToken: null,
+    userId: null,
+    loading: false,
+    error: null
+  });
+};
+
 const authFail = (state, payload) =>
   updateObject(state, { error: payload.error, loading: false });
 
@@ -31,6 +40,8 @@ const reducer = (state = initialState, { type, payload = {} }) => {
       return authSucccess(state, payload);
     case actionTypes.AUTH_FAIL:
       return authFail(state, payload);
+    case actionTypes.AUTH_LOGOUT:
+      return authLogout(state, payload);
 
     default:
       return state;

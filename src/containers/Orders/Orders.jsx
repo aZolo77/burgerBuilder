@@ -9,7 +9,8 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 export class Orders extends Component {
   componentDidMount() {
-    this.props.onFetchOrders();
+    const { idToken } = this.props;
+    this.props.onFetchOrders(idToken);
   }
 
   renderOrders = () => {
@@ -25,16 +26,17 @@ export class Orders extends Component {
   }
 }
 
-const mapStateToProps = ({ order: { orders, loading } }) => {
+const mapStateToProps = ({ order: { orders, loading }, auth: { idToken } }) => {
   return {
     orders,
-    loading
+    loading,
+    idToken
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchOrders: () => dispatch(actions.fetchOrders())
+    onFetchOrders: token => dispatch(actions.fetchOrders(token))
   };
 };
 
