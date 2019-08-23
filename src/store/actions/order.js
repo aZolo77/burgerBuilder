@@ -70,11 +70,14 @@ export const purchaseBurger = (orderData, token = null) => {
   };
 };
 
-export const fetchOrders = (token = null) => {
+export const fetchOrders = (token = null, userId = null) => {
   return dispatch => {
     dispatch(fetchOrdersStart());
+
+    const queryParams = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
+
     axios
-      .get(`/orders.json?auth=${token}`) // ** sending token to firebase
+      .get('/orders.json' + queryParams) // ** sending token & userId to firebase
       .then(({ data }) => {
         const orders = [];
         for (const key in data) {

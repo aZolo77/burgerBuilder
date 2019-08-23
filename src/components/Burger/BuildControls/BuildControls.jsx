@@ -16,7 +16,8 @@ const BuildControls = ({
   disabled,
   price,
   purchasable,
-  ordered
+  ordered,
+  isAuth
 }) => {
   return (
     <div className={classes.BuildControls}>
@@ -37,7 +38,7 @@ const BuildControls = ({
         onClick={ordered}
         disabled={!purchasable}
       >
-        ORDER NOW
+        {isAuth ? 'ORDER NOW' : 'SIGN UP TO ORDER'}
       </button>
     </div>
   );

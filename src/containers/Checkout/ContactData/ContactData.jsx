@@ -118,7 +118,7 @@ export class ContactData extends Component {
   // Send Order to the Database
   orderHandler = e => {
     e.preventDefault();
-    const { ingredients, price, onOrderBurger, idToken } = this.props;
+    const { ingredients, price, onOrderBurger, idToken, userId } = this.props;
     const { orderForm } = this.state;
 
     const orderData = {};
@@ -130,7 +130,8 @@ export class ContactData extends Component {
     const order = {
       ingredients,
       price,
-      orderData
+      orderData,
+      userId
     };
 
     onOrderBurger(order, idToken);
@@ -204,13 +205,14 @@ export class ContactData extends Component {
 const mapStateToProps = ({
   burgerBuilder: { ingredients, totalPrice },
   order: { loading },
-  auth: { idToken }
+  auth: { idToken, userId }
 }) => {
   return {
     ingredients,
     price: totalPrice,
     loading,
-    idToken
+    idToken,
+    userId
   };
 };
 
