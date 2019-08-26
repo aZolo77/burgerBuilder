@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from '../../../axios-orders';
 import { connect } from 'react-redux';
+import { updateObject, checkValidity } from '../../../shared/utility';
 
 import * as orderActions from '../../../store/actions/index';
 import Button from '../../../components/UI/Button/Button';
@@ -75,7 +76,8 @@ export class ContactData extends Component {
         },
         value: '',
         validation: {
-          required: true
+          required: true,
+          isEmail: true
         },
         valid: false,
         touched: false
@@ -102,19 +104,6 @@ export class ContactData extends Component {
     formIsValid: false
   };
 
-  checkValidity = (value, rules, isValid = true) => {
-    if (rules.required) {
-      isValid = value.trim() !== '' && isValid;
-    }
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
-    }
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
-    return isValid;
-  };
-
   // Send Order to the Database
   orderHandler = e => {
     e.preventDefault();
@@ -139,12 +128,12 @@ export class ContactData extends Component {
 
   inputChangedHandler = id => ({ target }) => {
     const { orderForm } = this.state;
-    const updatedFormElement = { ...orderForm[id], value: target.value };
-    updatedFormElement.valid = this.checkValidity(
-      updatedFormElement.value,
-      updatedFormElement.validation
-    );
-    updatedFormElement.touched = true;
+
+    const updatedFormElement = updateObject(orderForm[id], {
+      value: target.value,
+      valid: checkValidity(target.value, orderForm[id].validation),
+      touched: true
+    });
     orderForm[id] = updatedFormElement;
 
     let formIsValid = true;
