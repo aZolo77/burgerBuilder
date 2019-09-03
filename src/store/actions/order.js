@@ -1,5 +1,4 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
 
 export const purchaseInit = () => {
   return {
@@ -54,42 +53,14 @@ export const purchaseBurgerFail = error => {
   };
 };
 
-// * async
-export const purchaseBurger = (orderData, token = null) => {
-  return dispatch => {
-    dispatch(purchaseBurgerStart());
-    axios
-      .post(`/orders.json?auth=${token}`, orderData) // firebase endpoint
-      .then(response => {
-        // console.log(response.data);
-        dispatch(purchaseBurgerSuccess(response.data.name, orderData));
-      })
-      .catch(err => {
-        dispatch(purchaseBurgerFail(err));
-      });
-  };
-};
+export const purchaseBurger = (orderData, token = null) => ({
+  type: actionTypes.PURCHASE_BURGER,
+  orderData,
+  token
+});
 
-export const fetchOrders = (token = null, userId = null) => {
-  return dispatch => {
-    dispatch(fetchOrdersStart());
-
-    const queryParams = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
-
-    axios
-      .get('/orders.json' + queryParams) // ** sending token & userId to firebase
-      .then(({ data }) => {
-        const orders = [];
-        for (const key in data) {
-          orders.push({
-            ...data[key],
-            id: key
-          });
-        }
-        dispatch(fetchOrdersSuccess(orders));
-      })
-      .catch(err => {
-        dispatch(fetchOrdersFail(err));
-      });
-  };
-};
+export const fetchOrders = (token = null, userId = null) => ({
+  type: actionTypes.FETCH_ORDERS,
+  token,
+  userId
+});

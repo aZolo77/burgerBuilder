@@ -6,7 +6,17 @@ export {
   setIngredients
 } from './burgerBuilder';
 
-export { purchaseInit, purchaseBurger, fetchOrders } from './order';
+export {
+  purchaseInit,
+  purchaseBurger,
+  fetchOrders,
+  purchaseBurgerFail,
+  purchaseBurgerStart,
+  purchaseBurgerSuccess,
+  fetchOrdersStart,
+  fetchOrdersSuccess,
+  fetchOrdersFail
+} from './order';
 
 export {
   auth,
@@ -15,5 +25,7 @@ export {
   authSuccess,
   logout,
   setAuthRedirectPath,
-  authCheckState
+  authCheckState,
+  logoutSucceed,
+  checkAuthTimeout
 } from './auth';
