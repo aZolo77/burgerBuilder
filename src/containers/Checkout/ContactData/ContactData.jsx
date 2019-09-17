@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import axios from '../../../axios-orders';
 import { connect } from 'react-redux';
 import { updateObject, checkValidity } from '../../../shared/utility';
@@ -11,104 +11,112 @@ import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 
 import classes from './ContactData.css';
 
-export class ContactData extends Component {
-  state = {
-    orderForm: {
-      name: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'text',
-          placeholder: 'Your Name'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        valid: false,
-        touched: false
+const initialState = {
+  orderForm: {
+    name: {
+      elementType: 'input',
+      elementConfig: {
+        type: 'text',
+        placeholder: 'Your Name'
       },
-      street: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'text',
-          placeholder: 'Street'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        valid: false,
-        touched: false
+      value: '',
+      validation: {
+        required: true
       },
-      zipcode: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'text',
-          placeholder: 'ZIP Code'
-        },
-        value: '',
-        validation: {
-          required: true,
-          minLength: 5,
-          maxLength: 7
-        },
-        valid: false,
-        touched: false
-      },
-      country: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'text',
-          placeholder: 'Country'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        valid: false,
-        touched: false
-      },
-      email: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'email',
-          placeholder: 'Your E-Mail'
-        },
-        value: '',
-        validation: {
-          required: true,
-          isEmail: true
-        },
-        valid: false,
-        touched: false
-      },
-      deliveryMethod: {
-        elementType: 'select',
-        elementConfig: {
-          options: [
-            {
-              value: 'fastest',
-              displayValue: 'Fastest'
-            },
-            {
-              value: 'cheapest',
-              displayValue: 'Cheapest'
-            }
-          ]
-        },
-        value: 'fastest',
-        validation: {},
-        valid: true
-      }
+      valid: false,
+      touched: false
     },
-    formIsValid: false
-  };
+    street: {
+      elementType: 'input',
+      elementConfig: {
+        type: 'text',
+        placeholder: 'Street'
+      },
+      value: '',
+      validation: {
+        required: true
+      },
+      valid: false,
+      touched: false
+    },
+    zipcode: {
+      elementType: 'input',
+      elementConfig: {
+        type: 'text',
+        placeholder: 'ZIP Code'
+      },
+      value: '',
+      validation: {
+        required: true,
+        minLength: 5,
+        maxLength: 7
+      },
+      valid: false,
+      touched: false
+    },
+    country: {
+      elementType: 'input',
+      elementConfig: {
+        type: 'text',
+        placeholder: 'Country'
+      },
+      value: '',
+      validation: {
+        required: true
+      },
+      valid: false,
+      touched: false
+    },
+    email: {
+      elementType: 'input',
+      elementConfig: {
+        type: 'email',
+        placeholder: 'Your E-Mail'
+      },
+      value: '',
+      validation: {
+        required: true,
+        isEmail: true
+      },
+      valid: false,
+      touched: false
+    },
+    deliveryMethod: {
+      elementType: 'select',
+      elementConfig: {
+        options: [
+          {
+            value: 'fastest',
+            displayValue: 'Fastest'
+          },
+          {
+            value: 'cheapest',
+            displayValue: 'Cheapest'
+          }
+        ]
+      },
+      value: 'fastest',
+      validation: {},
+      valid: true
+    }
+  },
+  formIsValid: false
+};
+
+const ContactData = ({
+  ingredients,
+  price,
+  onOrderBurger,
+  idToken,
+  userId,
+  loading
+}) => {
+  const [contactState, setContactState] = useState(initialState);
 
   // Send Order to the Database
-  orderHandler = e => {
+  const orderHandler = e => {
     e.preventDefault();
-    const { ingredients, price, onOrderBurger, idToken, userId } = this.props;
-    const { orderForm } = this.state;
+    const { orderForm } = contactState;
 
     const orderData = {};
     for (const key in orderForm) {
@@ -126,8 +134,8 @@ export class ContactData extends Component {
     onOrderBurger(order, idToken);
   };
 
-  inputChangedHandler = id => ({ target }) => {
-    const { orderForm } = this.state;
+  const inputChangedHandler = id => ({ target }) => {
+    const { orderForm } = contactState;
 
     const updatedFormElement = updateObject(orderForm[id], {
       value: target.value,
@@ -142,14 +150,14 @@ export class ContactData extends Component {
       formIsValid = orderForm[key].valid && formIsValid;
     }
 
-    this.setState({
+    setContactState({
       orderForm,
       formIsValid
     });
   };
 
-  renderForm = () => {
-    const { orderForm, formIsValid } = this.state;
+  const renderForm = () => {
+    const { orderForm, formIsValid } = contactState;
     const formElementArr = [];
 
     for (const key in orderForm) {
@@ -160,7 +168,7 @@ export class ContactData extends Component {
     }
 
     return (
-      <form onSubmit={this.orderHandler}>
+      <form onSubmit={orderHandler}>
         {formElementArr.map(({ id, config }) => (
           <Input
             key={id}
@@ -168,7 +176,7 @@ export class ContactData extends Component {
             elementConfig={config.elementConfig}
             shouldValidate={config.validation}
             value={config.value}
-            changed={this.inputChangedHandler(id)}
+            changed={inputChangedHandler(id)}
             invalid={!config.valid}
             touched={config.touched}
           />
@@ -180,16 +188,13 @@ export class ContactData extends Component {
     );
   };
 
-  render() {
-    const { loading } = this.props;
-    return (
-      <div className={classes.ContactForm}>
-        <h4>Enter your Contact Data</h4>
-        {loading ? <Spinner /> : this.renderForm()}
-      </div>
-    );
-  }
-}
+  return (
+    <div className={classes.ContactForm}>
+      <h4>Enter your Contact Data</h4>
+      {loading ? <Spinner /> : renderForm()}
+    </div>
+  );
+};
 
 const mapStateToProps = ({
   burgerBuilder: { ingredients, totalPrice },
